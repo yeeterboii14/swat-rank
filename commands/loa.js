@@ -2,8 +2,6 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, Embed
 const Discord = require('discord.js')
 const fs = require('fs')
 
-
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('loa')

@@ -21,10 +21,6 @@ module.exports = {
 
     let primaryMessage = await interaction.channel.send({ content: `Pushing all users within the group to an array.`})
 
-      const ranksInGroup = await roblox.getRoles(Number(groupId)).catch(err => {
-    primaryMessage.edit({content: 'There was a problem while attempting to achieve the Group Members in group ' + groupId})
-  })
-
     let finishedEmbed = new EmbedBuilder()
     
       let userIdGroup = new Array();
@@ -55,10 +51,13 @@ module.exports = {
 
       id = userIdGroup[i]
 
+    await wait(5000)
+
     const groups = await roblox.getGroups(id)
 
-        const cardsOnList = await trello.getCardsForList('63a7b98ba30ac7008ae4a674')
+    await wait(3000)
 
+        const cardsOnList = await trello.getCardsForList('63a7b98ba30ac7008ae4a674')
 
     flaggedGroups = new Array()
     manuallyFlaggedGroups =  new Array()
@@ -71,6 +70,7 @@ module.exports = {
           
         } else {
           flaggedGroups.push(`[${groupFound.name}](https://roblox.com/groups/${groupFound.id}) owned by [${groupFound.owner.username}](https://roblox.com/users/${groupFound.owner.userId}) with ${groupFound.memberCount} members`)
+          console.log(flaggedGroups)
         }
       }
 
@@ -80,7 +80,7 @@ module.exports = {
     }
     }
 
-      wait(3000)
+      await wait(3000)
 
       let username2 = await roblox.getUsernameFromId(id)
 
@@ -90,9 +90,6 @@ module.exports = {
       finishedEmbed.addFields({ name: `Flagged ${username2}`, value: `Automatic Flagged Groups (${flaggedGroups.length})\n\n${mappedUsers}\n\n Manually Flagged Groups (${manuallyFlaggedGroups.length})\n\n${mappedUsers2}`, inline: false})
       
       fieldsOnEmbed = Number(fieldsOnEmbed) + Number('1')
-
-      console.log(fieldsOnEmbed)
-      console.log(i)
 
       if(fieldsOnEmbed === 25) {
         finishedEmbed.setTitle(`Flagged Users`);

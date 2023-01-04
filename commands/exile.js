@@ -62,9 +62,6 @@ module.exports = {
         return interaction.reply({ embeds: [notAbleRankEmb], ephemeral: true});
     }
 
-      if(newrank === 'NOT_FOUND') {
-        return interaction.reply({ embeds: [notFoundEmbedRank], ephemeral: true})
-      }
     let exileResponse;
     try {
         exileResponse = await roblox.exile(Number(process.env.groupId), id);

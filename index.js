@@ -14,12 +14,7 @@ const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder, ActionRowBu
 const Discord = require('discord.js')
 const fs = require('node:fs');
 const path = require('node:path');
-let peopleBefore = 0;
-let timeToSearch = 2000;
-let processTime = 15000;
-let sheetToChoose = ''
 let foundUser = ''
-let jsonFile
 const Trello = require('trello')
 const trello = new Trello(process.env.APIKey, process.env.APIToken)
 const fetch = require('node-fetch');
@@ -139,6 +134,7 @@ await cardsOnBoard.forEach(async function (item) {
       let unit;
 
                     if(foundUser.roles.cache.some(role =>["Private"].includes(role.name))) rank = 'Private'
+                          if(foundUser.roles.cache.some(role =>["Private First Class"].includes(role.name))) rank = 'Private First Class'
                     if(foundUser.roles.cache.some(role =>["Corporal"].includes(role.name))) rank = 'Corporal'
                     if(foundUser.roles.cache.some(role =>["Sergeant"].includes(role.name))) rank = 'Sergeant'
                     if(foundUser.roles.cache.some(role =>["Lieutenant"].includes(role.name))) rank = 'Lieutenant'
@@ -383,6 +379,7 @@ await cardsOnBoard.forEach(async function (item) {
       let unit;
 
                     if(foundUser.roles.cache.some(role =>["Private"].includes(role.name))) rank = 'Private'
+                                if(foundUser.roles.cache.some(role =>["Private First Class"].includes(role.name))) rank = 'Private First Class'
                     if(foundUser.roles.cache.some(role =>["Corporal"].includes(role.name))) rank = 'Corporal'
                     if(foundUser.roles.cache.some(role =>["Sergeant"].includes(role.name))) rank = 'Sergeant'
                     if(foundUser.roles.cache.some(role =>["Lieutenant"].includes(role.name))) rank = 'Lieutenant'
@@ -478,6 +475,9 @@ function formatDate(date) {
           .setFooter({text: 'SWAT Automation', iconURL: process.env.image})
     .setTimestamp()
 
+      const role = interaction.guild.roles.cache.find(role => role.id == "861000811033919498");
+
+      foundUser.roles.add(role)
       foundUser.send({ embeds: [embed1] })
       interaction.message.edit({content: `LOA accepted by ${interaction.member.displayName}.`, components: [] })
       

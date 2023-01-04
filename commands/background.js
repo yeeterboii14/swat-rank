@@ -7,12 +7,24 @@ const trello = new Trello(process.env.APIKey, process.env.APIToken)
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('search')
-		.setDescription('Search an individual for any flags.')
+		.setName('background')
+		.setDescription('Begin a background search.')
     .addStringOption(option =>
 		option.setName('username')
 			.setDescription('The roblox username of the user you want to search')
 			.setRequired(true))
+    .addStringOption(option => 
+        option
+                     .setName('type')
+                     .setDescription('The type of background search.')
+                     .addChoices(
+                       { name: `All`, value: `all` },
+                       { name: `Southerns Mano County`, value: `south-mano` },
+                       { name: `Known Roleplay Games`, value: `known-games`},
+                       { name: `Internet Scan`, value: `internet-scan`},
+                       { name: `MCSO:SWAT`, value: `swat-background`},
+                     )
+      .setRequired(true))
     .setDMPermission(false),
 	async execute(interaction, client) {
 
@@ -128,21 +140,15 @@ collectiblesCount = await roblox.getCollectibles({userId: id, sortOrder: "Asc", 
     .setFooter({text: 'SWAT Automation', iconURL: process.env.image})
     .setTimestamp()
 
-    await wait(15000) // just giving it time to like chill out
+    await wait(2000) // just giving it time to like chill out
 
         await primaryMessage.edit({ content: `Performing inventory scan **2/3**`})
 
             await primaryMessage.edit({ content: `Performing group scan **3/3**`})
 
-    await wait(45000)
-
     const groups = await roblox.getGroups(id)
 
         const cardsOnList = await trello.getCardsForList('63a7b98ba30ac7008ae4a674')
-            const cardsOnList2 = await trello.getCardsForList('63a7b9c0ec2e0c012c1f85af')
-                const cardsOnList3 = await trello.getCardsForList('63b37f304593a72873c4e82e')
-
-
 
 
     const flaggedGroups = new Array()
@@ -177,20 +183,7 @@ collectiblesCount = await roblox.getCollectibles({userId: id, sortOrder: "Asc", 
         .setFooter({text: 'SWAT Automation', iconURL: process.env.image})
     .setTimestamp()
 
-    let embedContent = `<@!${interaction.member.id}>`
-    
-  await cardsOnList2.forEach(async function (item) {
-      if(item.name == id) embedContent = `**User has been flagged as blacklisted.**\n\n<@!${interaction.member.id}>`
-  })
-
-await cardsOnList3.forEach(async function (item) {
-      const splitCardName = item.name.split(":")
-    const lastWordOfCardName = splitCardName[splitCardName.length - 1]
-  
-      if(lastWordOfCardName == id) embedContent = `**User has been flagged as blacklisted.**\n\n<@!${interaction.member.id}>`
-  })
-
     primaryMessage.delete()
-   interaction.channel.send({content: `${embedContent}`, embeds: [profileEmbed,groupScan]})
+   interaction.channel.send({content: `<@!${interaction.member.id}>`, embeds: [profileEmbed,groupScan]})
 	},
 };
